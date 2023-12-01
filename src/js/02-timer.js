@@ -13,6 +13,7 @@ const selector = '#datetime-picker';
 
 let timerId = null;
 let timerDate;
+ 
 
 const options = {
     enableTime: true,
@@ -42,16 +43,25 @@ function handleDateChange(date) {
 
 startBtn.addEventListener('click', onStartTimer)
 
+
 function onStartTimer() {
     timerId = setInterval(() => {
-        const convertMsResult = convertMs(timerDate - new Date());
+        const timeDifference = timerDate - new Date();
+
+        console.log(timeDifference)
+
+        if (timeDifference < 0) {
+            return clearInterval(timerId);
+        }
+
+        const convertMsResult = convertMs(timeDifference);
         // console.log(convertMsResult);
         dateSeconds.innerHTML = addLeadingZero(convertMsResult.seconds);
         dateMinutes.innerHTML = addLeadingZero(convertMsResult.minutes);
         dateHours.innerHTML = addLeadingZero(convertMsResult.hours);
         dateDays.innerHTML = addLeadingZero(convertMsResult.days);
     }, 1000)
-    Notiflix.Notify.success("Tmer started");
+    Notiflix.Notify.success("Timer started");
 }
 
 function addLeadingZero(value) {
@@ -61,6 +71,7 @@ function addLeadingZero(value) {
 
     return value
 }
+
 
 function convertMs(ms) {
     // Number of milliseconds per unit of time
